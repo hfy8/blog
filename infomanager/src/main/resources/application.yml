@@ -1,0 +1,45 @@
+server:
+  port: 8085
+eureka:
+  client:
+    service-url:
+      defaultZone: http://172.18.0.4:8088/eureka/
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${server.port}
+    lease-renewal-interval-in-seconds: 5
+    lease-expiration-duration-in-seconds: 15
+spring:
+  application:
+    name: blog-infomanager-service
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 123456
+    url: jdbc:mysql://172.18.0.3:3306/blog?characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      auto-commit: true
+      maximum-pool-size: 15
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      pool-name: oauth-pool
+      connection-test-query: select 1
+      max-lifetime: 3000000
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+logging:
+  level:
+    com.blog.infomanager.maps: debug
+security:
+  oauth2:
+    resource:
+      jwt:
+        key-value: testKey
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql

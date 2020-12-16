@@ -1,0 +1,42 @@
+buildscript {
+    repositories {
+        maven { url "https://maven.aliyun.com/repository/gradle-plugin" }
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://maven.aliyun.com/repository/jcenter' }
+        maven { url 'http://maven.aliyun.com/nexus/content/groups/public' }
+    }
+}
+plugins {
+    id 'java'
+}
+
+allprojects {
+    repositories {
+        mavenCentral ()
+        maven {
+            url 'https://maven.aliyun.com/repository/spring/'
+        }
+        maven {
+            url 'https://maven.aliyun.com/repository/public/'
+        }
+        maven { url "https://maven.aliyun.com/repository/gradle-plugin" }
+        maven { url 'https://maven.aliyun.com/repository/google'}
+        maven { url 'https://maven.aliyun.com/repository/jcenter'}
+        maven { url 'http://maven.aliyun.com/nexus/content/groups/public'}
+    }
+}
+apply plugin: 'java'
+group = 'com.blog'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+ext {
+    set('springCloudVersion', "Hoxton.SR8")
+}
+
+
+
+test {
+    useJUnitPlatform()
+}
+

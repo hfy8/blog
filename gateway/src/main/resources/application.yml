@@ -1,0 +1,37 @@
+spring:
+  application:
+    name: gateway-server
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: blog-auth-service
+          uri: lb://blog-auth-service
+          predicates:
+            - Path=/oauth/**
+        - id: blog-infomanager-service
+          uri: lb://blog-infomanager-service
+          predicates:
+            - Path=/comment/**,/issue/**,/follow/**
+        - id: blog-image-service
+          uri: lb://blog-image-service
+          predicates:
+            - Path=/minio/**
+server:
+  port: 10000
+  tomcat:
+    max-swallow-size: 30MB
+eureka:
+  client:
+    service-url:
+      defaultZone: http://172.18.0.4:8088/eureka/
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${server.port}
+    lease-renewal-interval-in-seconds: 5
+    lease-expiration-duration-in-seconds: 15
+logging:
+  level:
+    root: info
