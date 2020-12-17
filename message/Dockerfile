@@ -9,10 +9,10 @@ VOLUME /tmp
 
 # COPY or ADD to image
 # 将编译目标jar包复制到/app.jar
-ADD /build/libs/imgserver-0.0.1-SNAPSHOT.jar app.jar
+ADD /build/libs/message-0.0.1-SNAPSHOT.jar app.jar
 
 # 默认8080端口
 # 指定项目暴露的端口号，与项目配置一样,即容器配置的暴露端口
-EXPOSE 9090
+EXPOSE 8989
 #ENTRYPOINT 执行项目 app.jar。为了缩短 Tomcat 启动时间，添加一个系统属性指向 "/dev/urandom" 作为 Entropy Source
-ENTRYPOINT ["java", "-Xmx258m","-jar","/app.jar"]
+ENTRYPOINT ["java", "-Xmx512m","-jar","-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8989", "/app.jar"]
