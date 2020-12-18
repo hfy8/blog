@@ -15,6 +15,7 @@ public class Follow {
     private String uId;
     private String fUid;
     private String fUname;
+    private String fUicon;
     private String uName;
     private Integer status;
 

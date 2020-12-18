@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.provider.token.DefaultAccessTokenConverter;
-import org.springframework.security.oauth2.provider.token.DefaultUserAuthenticationConverter;
 import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
@@ -25,7 +24,9 @@ public class JwtConfig {
     public JwtAccessTokenConverter jwtAccessTokenConverter() {
         JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
         DefaultAccessTokenConverter defaultAccessTokenConverter = new DefaultAccessTokenConverter();
-        defaultAccessTokenConverter.setUserTokenConverter(new SelfUserAuthenticationConverter());
+        SelfUserAuthenticationConverter selfUserAuthenticationConverter= new SelfUserAuthenticationConverter();
+        selfUserAuthenticationConverter.setUserDetailsService(customUserDetailService);
+        defaultAccessTokenConverter.setUserTokenConverter(selfUserAuthenticationConverter);
         converter.setAccessTokenConverter(defaultAccessTokenConverter);
         converter.setSigningKey("testKey");
         return converter;

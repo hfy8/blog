@@ -51,3 +51,7 @@ feign:
         connectTimeout: 5000
         readTimeout: 5000
         loggerLevel: basic
+security:
+  oauth2:
+    authorization:
+      check-token-access: permitAll()

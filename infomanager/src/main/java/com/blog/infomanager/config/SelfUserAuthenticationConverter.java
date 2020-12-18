@@ -62,7 +62,7 @@ public class SelfUserAuthenticationConverter extends DefaultUserAuthenticationCo
             Object principal = object;
             Collection<? extends GrantedAuthority> authorities = this.getAuthorities(map);
             if (this.userDetailsService != null) {
-                UserDetails user = this.userDetailsService.loadUserByUsername((String)map.get("user_name"));
+                UserDetails user = this.userDetailsService.loadUserByUsername((String)map.get("userAccount"));
                 authorities = user.getAuthorities();
                 principal = user;
             }

@@ -1,5 +1,6 @@
 package com.blog.security.config;
 
+import com.blog.common.model.LoginInfo;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -53,12 +54,19 @@ public class SelfUserAuthenticationConverter extends DefaultUserAuthenticationCo
     @Override
     public Authentication extractAuthentication(Map<String, ?> map) {
         if (map.containsKey(USER_NAME)) {
-            Object principal;
+            LoginInfo object=new LoginInfo();
+            object.setUserName(map.get("userName").toString());
+            object.setUserAccount(map.get("userAccount").toString());
+            object.setUserIcon(map.get("userIcon").toString());
+            object.setUserId(map.get("userId").toString());
+            Object principal = object;
             Collection<? extends GrantedAuthority> authorities = this.getAuthorities(map);
-            UserDetails user = this.userDetailsService.loadUserByUsername(map.get(USER_ID).toString());
-            authorities = user.getAuthorities();
-            principal = user;
-            return new UsernamePasswordAuthenticationToken(principal, N_A, authorities);
+            if (this.userDetailsService != null) {
+                UserDetails user = this.userDetailsService.loadUserByUsername((String)map.get("userAccount"));
+                authorities = user.getAuthorities();
+                principal = user;
+            }
+            return new UsernamePasswordAuthenticationToken(principal, "N/A", authorities);
         } else {
             return null;
         }

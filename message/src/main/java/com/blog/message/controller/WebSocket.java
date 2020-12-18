@@ -9,7 +9,9 @@ package com.blog.message.controller;
  * @modifyBy
  */
 
+import com.alibaba.fastjson.JSON;
 import com.blog.message.pojo.Message;
+import com.blog.message.service.OauthSevice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +34,16 @@ public class WebSocket {
      */
     public static int onlineNumber = 0;
 
+    private static OauthSevice oauthSevice;
+
+
     @Autowired
     WebSocket webSocket;
+
+    @Autowired
+    public void setChatService(OauthSevice oauthSevice) {
+        WebSocket.oauthSevice = oauthSevice;
+    }
 
 
     /**
@@ -62,15 +72,16 @@ public class WebSocket {
     public void onOpen(@PathParam("token") String token, Session session) throws IOException {
         onlineNumber++;
         logger.info("现在来连接的客户id：" + session.getId() + "用户名：" + userId);
-        this.userId = token;;
+        Map maps = oauthSevice.checkToken(token);
+        if (null == maps || maps.isEmpty()) {
+            return;
+        }
+        this.userId = (String) maps.get("userId");
         this.session = session;
         //把自己的信息加入到map当中去 this 就是webSocket链接
         clients.put(userId, this);
         sessionMaps.put(session, userId);
         logger.info("有连接关闭！ 当前在线人数" + clients.size());
-        WebSocket webSocket = clients.get(userId);
-        webSocket.session.getBasicRemote().sendText("asdasdasdda");
-
 
     }
 
@@ -88,11 +99,6 @@ public class WebSocket {
         onlineNumber--;
         clients.remove(userId);
         sessionMaps.remove(session);
-        try {
-            sendMessageAll("当前有用户下线");
-        } catch (IOException e) {
-            logger.info(userId + "下线的时候通知所有人发生了错误");
-        }
         logger.info("有连接关闭！ 当前在线人数" + clients.size());
     }
 
@@ -103,8 +109,9 @@ public class WebSocket {
      * @param session 会话
      */
     @OnMessage
-    public void onMessage(String message, Session session) {
-
+    public void onMessage(String message, Session session) throws IOException, EncodeException {
+        Message mes = JSON.parseObject(message, Message.class);
+        sendMessageTo(mes);
     }
 
 
@@ -117,9 +124,9 @@ public class WebSocket {
 
     }
 
-    public void sendMessageAll(String message) throws IOException {
+    public void sendMessageAll(Message message) throws IOException {
         for (WebSocket item : clients.values()) {
-            item.session.getAsyncRemote().sendText(message);
+            item.session.getAsyncRemote().sendObject(message);
         }
     }
 

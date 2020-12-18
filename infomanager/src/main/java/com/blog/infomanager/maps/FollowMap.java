@@ -17,7 +17,7 @@ public interface FollowMap {
      * @param follow
      * @return
      */
-    @Insert("insert into follow(u_id,f_uid,f_uname,u_name) values(#{follow.uId},#{follow.fUid},#{follow.fUname},#{follow.uName})")
+    @Insert("insert into follow(u_id,f_uid,f_uname,u_name,f_uicon) values(#{follow.uId},#{follow.fUid},#{follow.fUname},#{follow.uName},#{follow.fUicon})")
     void followUser(@Param("follow") Follow follow);
 
 
@@ -34,7 +34,7 @@ public interface FollowMap {
      * @param uId
      * @return
      */
-    @Select("select u_id,f_uid,f_uname,u_name from follow where u_id=#{u_id} and status=1 ")
+    @Select("select u_id,f_uid,f_uname,u_name,f_uicon from follow where u_id=#{u_id} and status=1 ")
     @ResultType(Follow.class)
     List<Follow> getFollows(@Param("u_id") String uId);
 
@@ -43,7 +43,7 @@ public interface FollowMap {
      * @param follow
      * @return
      */
-    @Select("select u_id,f_uid,f_uname,u_name from follow where u_id=#{follow.uId} and f_uid=#{follow.fUid} ")
+    @Select("select u_id,f_uid,f_uname,u_name,f_uicon from follow where u_id=#{follow.uId} and f_uid=#{follow.fUid} ")
     @ResultType(Follow.class)
     Follow getFollow(@Param("follow") Follow follow);
 

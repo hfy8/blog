@@ -37,4 +37,15 @@ public class WebSocketController {
         userWebSocket.sendMessageTo(message);
         return "成功";
     }
+
+    /**
+     * 模拟给同一个用户的不同客户段发送消息
+     * @return
+     */
+    @PostMapping(value = "/send/all")
+    String sendToAll(@RequestBody Message message) throws IOException, EncodeException {
+        log.info("系统消息");
+        userWebSocket.sendMessageAll(message);
+        return "成功";
+    }
 }
