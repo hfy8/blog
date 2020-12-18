@@ -16,3 +16,17 @@ ribbon:
   http:
     client:
       enabled: true
+feign:
+  httpclient:
+    enabled: true
+  hystrix:
+    enabled: false
+  compression:
+    request:
+      min-request-size: 4096
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000
+        loggerLevel: basic
